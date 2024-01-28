@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App';
 import HelloWorld from './helloword/HelloWorld';
 import TestFiled from './forms/TestFiled';
@@ -8,7 +9,7 @@ import Fruite from './Fruits/Fruite';
 import Counter from './Counter/Counter';
 import Event from './Eventss/Event';
 import ToggleName from './toggle/toggleName';
- 
+import ProductList from './tp/store/ProductList';
 //import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -37,6 +38,6 @@ const fruitarray =['orange'
 // reportWebVitals()
   root.render(
     
-    <Counter initialvalue={0} step={1}/>
+    <ProductList />
   );
   
