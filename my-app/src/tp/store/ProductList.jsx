@@ -1,95 +1,108 @@
-import { useEffect,useState } from "react"
-import Product from "./Product"
-export default function ProductList(){
-    const [productList,setProductList]=useState([])
-    const [serchinput, setSearchInput]=useState('')
-    const [categories , setCategoryList]=useState([])
-    //on veut recuperer la valeur donc on doit la stocker dans une 
-   // place dans on ulitse states
-    const display=() =>{
-        console.log(serchinput)
-            const productTemp=productList.filter((product)=>{
-                return product.title.includes(serchinput) || product.id.toString().startsWith(serchinput) 
-            ||product.description.includes(serchinput) 
-            })
+import { useState, useEffect } from 'react';
+import Product from './Product';
 
-        if (productList.length>0){
-            
+export default function ProductList() {
+  const [searchInput, setSearchInput] = useState('');
+  const [productList, setProductList] = useState([]);
+  const [categories, setCategoryList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
-        return productTemp.map((product,key)=>{return <Product product={product} key={key}/>})}
-        
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const value = document.querySelector('#search').value;
+    setSearchInput(value);
+  };
 
-        return <tr><td>No items</td></tr>}
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
 
+  const display = () => {
+    const filteredProducts = productList.filter((product) => {
+      const includesSearch = product.title.includes(searchInput) || product.description.includes(searchInput);
+      const includesCategory = !selectedCategory || product.category === selectedCategory;
+      return includesSearch && includesCategory;
+    });
 
-        const displaycategory=() =>{
-            return categories.map((categorie)=>{<button>{categories}</button>})
-        }
-    
-
-    const getproducts=()=>{
-        fetch('https://fakestoreapi.com/products')
-        .then(response=>response.json())
-        .then(response=>setProductList(response))
-        .catch((error)=>console.error('Error',error));
-    }
-    
-    const getcategories=()=>{
-        fetch('https://fakestoreapi.com/products/categories')
-        .then(response=>response.json())
-        .then(response=>setCategoryList(response))
-        .catch((error)=>console.error('Error',error));
+    if (filteredProducts.length > 0) {
+      return filteredProducts.map((product, key) => <Product product={product} key={key} />);
     }
 
+    return <tr><td colSpan={7}>No items</td></tr>;
+  };
 
-    useEffect(()=>{getproducts()},[]);
+  const displayCategory = () => {
+    return categories.map((category, key) => (
+      <button
+        key={key}
+        className={`btn ${selectedCategory === category ? 'btn-warning' : 'btn-secondary'}`}
+        onClick={() => handleCategoryClick(category)}
+      >
+        {category}
+      </button>
+    ));
+  };
 
+  const getProducts = () => {
+    fetch('https://fakestoreapi.com/products')
+      .then((response) => response.json())
+      .then((response) => setProductList(response))
+      .catch((error) => console.error('Error', error));
+  };
 
-    const handleSearch=(e)=>{
-     e.preventDefault();
-     const value=document.querySelector('#search').value;
-     setSearchInput(value)
-     console.log(serchinput)
+  const getCategories = () => {
+    fetch('https://fakestoreapi.com/products/categories')
+      .then((response) => response.json())
+      .then((response) => setCategoryList(response));
+  };
 
+  useEffect(() => {
+    getProducts();
+    getCategories();
+  }, []);
 
-    }
-    return  <div className='container-fluix mx-auto w-75 my-5'><h1>List des produits:</h1>
-    <h2>Search:</h2>
-    
-    <form >
-        <div className="row g-3 align-items-centre">
+  return (
+    <div className='container-fluid mx-auto w-75 my-5'>
+      <h1>Liste des produits:</h1>
+      <h2>Recherche:</h2>
+      <form onSubmit={handleSearch}>
+        <div className="row g-3 align-items-center">
+          <div className="col-auto">
+            <label className="col-form-label">Recherche</label>
+          </div>
+          <div className="col-auto">
+            <input id="search" onChange={handleSearch} className="form-control" />
+          </div>
+          <div className="col-auto">
+            <input type="submit" className="btn btn-primary" value='Recherche' />
+          </div>
+        </div>
+        <hr />
+        <h5>Catégorie:</h5>
+        <div className="row g-3 align-items-center">
+          <div className="btn-group">
+            {displayCategory()}
+          </div>
+        </div>
+        <hr />
+      </form>
 
-      <div className="col-auto">
-
-      <input className="form-control" type="text" id="search" placeholder="Search" />
-</div>
-<div className="col-auto">
-
-      <input className="btn btn-primary" type="submit" value='Search' onClick={handleSearch}/>
-</div>
-      </div>
-      <div className="row g-3 align-items-centre">
-     {getcategories()}
-     <div className="btn-group">{displaycategory()}</div>
-</div>
-    </form>
-
-    
-<table className='table'>
-    <thead><tr><th>ID</th>
-    <th>Title</th>
-    <th>Price</th>
-    <th>Description</th>
-    <th>Category</th>
-    <th>Image</th>
-    <th>Rating</th>
-
-    </tr></thead>
-<tbody>
-{display()}
-</tbody>
-
-
-    </table> 
-     </div>
+      <table className='table'>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Prix</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+            <th>Image</th>
+            <th>Évaluation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {display()}
+        </tbody>
+      </table>
+    </div>
+  );
 }

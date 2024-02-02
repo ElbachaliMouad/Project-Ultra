@@ -12,6 +12,8 @@ import ToggleName from './toggle/toggleName';
 import ProductList from './tp/store/ProductList';
 //import reportWebVitals from './reportWebVitals';
 
+import Form from './Counter/Form';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
@@ -38,6 +40,6 @@ const fruitarray =['orange'
 // reportWebVitals()
   root.render(
     
-    <ProductList />
+    <Form />
   );
   
