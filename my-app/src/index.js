@@ -11,8 +11,9 @@ import Event from './Eventss/Event';
 import ToggleName from './toggle/toggleName';
 import ProductList from './tp/store/ProductList';
 //import reportWebVitals from './reportWebVitals';
-
+import Page from './languageswitcher/Page';
 import Form from './Counter/Form';
+import Formvalidation from './fok/Formvalidation';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -40,6 +41,6 @@ const fruitarray =['orange'
 // reportWebVitals()
   root.render(
     
-    <Form />
+    <Formvalidation />
   );
   

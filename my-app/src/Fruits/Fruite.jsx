@@ -41,7 +41,7 @@ function Example() {
   }
 }*/
 
-export default function Fruite (){
+export default  function  Fruite (){
 
   const [fruit,setFruit]=useState('');
   const [fruitList,setFruitList]=useState([]);
